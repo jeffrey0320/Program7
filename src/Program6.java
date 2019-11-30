@@ -87,6 +87,7 @@ public class Program6 {
         String line;
         File myFile = new File("myinput.txt");
         Scanner cin = new Scanner(myFile);
+        Account allInfo;
 
         while(cin.hasNext()){
             line = cin.nextLine();
@@ -94,7 +95,13 @@ public class Program6 {
 
             Name acctName = new Name(tokens[0],tokens[1]);
             Depositor acctInfo = new Depositor(tokens[2],acctName);
-            Account allInfo = new Account(Integer.parseInt(tokens[3]),tokens[4],Double.parseDouble(tokens[5]),acctInfo,true);
+            if(tokens[4].equals("Checking")){
+                allInfo = new CheckingAccount(Integer.parseInt(tokens[3]),tokens[4],Double.parseDouble(tokens[5]),acctInfo,true);
+            }else if(tokens[4].equals("Savings")){
+                allInfo = new SavingsAccount(Integer.parseInt(tokens[3]),tokens[4],Double.parseDouble(tokens[5]),acctInfo,true);
+            }else{
+                allInfo = new CDAccount(Integer.parseInt(tokens[3]),tokens[4],Double.parseDouble(tokens[5]),acctInfo,true);
+            }
             bankObj.checkTypeDeposit(allInfo.getAccountType(),allInfo.getAccountBalance());
             Bank.addAmountOfAllAccts();
             bankObj.openNewAccount(allInfo);
@@ -146,7 +153,6 @@ public class Program6 {
     }
 
     public static void balance(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) {
-        Account customerAcct = new Account();
         Calendar currentDate = Calendar.getInstance();
 
         int requestedAccount;
@@ -157,6 +163,7 @@ public class Program6 {
 
         // call findAcct to search if requestedAccount exists
         index = bankObj.findAcct(requestedAccount);
+        Account customerAcct = bankObj.getAccts(index);
 
         ticket = new TransactionTicket(currentDate, "Balance Inquiry");
         TransactionReceipt receiptBalance = customerAcct.getBalance(ticket, bankObj, index);
@@ -170,7 +177,7 @@ public class Program6 {
     }
 
     public static void deposit(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) throws ParseException {
-        Account customerAcct;
+
         Calendar currentDate;
 
         int requestedAccount;
@@ -188,13 +195,14 @@ public class Program6 {
 
             outputFile.println(info.toStringError());
         }else{
-            customerAcct = bankObj.getAccts(index);
+            Account customerAcct = bankObj.getAccts(index);
             String accType = customerAcct.getAccountType();
 
             System.out.print("Enter amount to deposit: ");
             double amountToDeposit = kybd.nextDouble();
 
             if(accType.equals("CD")){
+
 
                 System.out.print("Enter CD term: ");
                 int amountOfTerm = kybd.nextInt();
@@ -204,7 +212,8 @@ public class Program6 {
 
                 currentDate = Calendar.getInstance();
                 ticket = new TransactionTicket(currentDate,"Deposit",amountToDeposit,amountOfTerm);
-                TransactionReceipt depReceipt = customerAcct.makeDepositCD(ticket,bankObj,index,dateOfMature);
+                customerAcct = new CDAccount();
+                TransactionReceipt depReceipt = customerAcct.makeDeposit(ticket,bankObj,index);
 
                 if(depReceipt.getSuccessIndicatorFlag()){
                     outputFile.println(depReceipt.toString(bankObj,index));

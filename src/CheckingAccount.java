@@ -6,8 +6,13 @@ public class CheckingAccount extends Account {
         super();
     }
 
-    public CheckingAccount(double amount){
-        super(amount);
+    public CheckingAccount(int acctNumber, String acctType, double acctBalance, Depositor personInfo, boolean acctStatus) {
+        super(acctNumber, acctType, acctBalance, personInfo, acctStatus);
+    }
+
+    @Override
+    public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index) {
+        return null;
     }
 
     public TransactionReceipt clearCheck(Check checkInfo, TransactionTicket info, Bank acc, int index){

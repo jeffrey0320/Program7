@@ -4,9 +4,13 @@ public class SavingsAccount extends Account {
         super();
     }
 
+    public SavingsAccount(int acctNumber, String acctType, double acctBalance, Depositor personInfo, boolean acctStatus) {
+        super(acctNumber, acctType, acctBalance, personInfo, acctStatus);
+    }
 
-    public SavingsAccount(Account copy) {
-        super(copy);
+    @Override
+    public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index) {
+        return null;
     }
 
 

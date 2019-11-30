@@ -1,10 +1,6 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
-public class Account {
+public abstract class Account {
     private Depositor personInfo;
     private int acctNumber;
     private String acctType;
@@ -16,14 +12,10 @@ public class Account {
     public Account() {
         personInfo = new Depositor();
         this.acctNumber = 0;
-        this.acctType = "";
         this.acctBalance = 0;
         arrayOfReceipts = new ArrayList<>();
     }
 
-    public Account(double amount){
-        this.acctBalance = amount;
-    }
 
     public Account(int acctNumber, String acctType, double acctBalance, Depositor personInfo, boolean acctStatus){
         this.acctNumber = acctNumber;
@@ -40,31 +32,6 @@ public class Account {
         acctNumber = acctNum;
         acctStatus = status;
     }
-
-    // Account toString override
-    public String toString(){
-        Name myName = personInfo.getPersonName();
-
-        String str = String.format("%-12s%-12s%-9s%13s%19s%-3s$%9.2f",
-                myName.getFirstName(),
-                myName.getLastName(),
-                personInfo.getSSN(),
-                this.acctNumber,
-                this.acctType, " ",
-                this.acctBalance);
-        return str;
-    }
-
-    public String toStringAccInfo(){
-        Name myName = personInfo.getPersonName();
-
-        String str =  "Name: " + myName.getFirstName() +"\t"+ myName.getLastName() +"\n"+
-                      "Social secruity number: " + personInfo.getSSN() +"\n"+
-                      "Account number: " + this.acctNumber +"\n"+
-                      "Account type: " + this.acctType +"\n"+
-                      String.format("Account Balance: $%.2f\n", this.acctBalance);
-        return str;
-    }
     // copy constructor
     public Account(Account copy){
         this.personInfo = copy.personInfo;
@@ -74,8 +41,6 @@ public class Account {
         this.acctBalance = copy.acctBalance;
         this.arrayOfReceipts = copy.arrayOfReceipts;
     }
-
-    public TransactionReceipt
 
     public TransactionReceipt getBalance(TransactionTicket ticketInfo, Bank obj, int index){
         TransactionReceipt newRec;
@@ -98,32 +63,7 @@ public class Account {
         }
     }
 
-    public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index){
-        TransactionReceipt newRec;
-        Account accInfo;
-        accInfo = obj.getAccts(index);
-        String accType = accInfo.getAccountType();
-
-        if(accInfo.getAccountStatus()){
-            if(ticketInfo.getAmountOfTransaction() <= 0.00){
-                String reason = "Invalid amount.";
-                newRec = new TransactionReceipt(ticketInfo,false,reason);
-                accInfo.arrayOfReceipts.add(newRec);
-                return  newRec;
-            }else{
-                double balance = accInfo.getAccountBalance();
-                double newBalance = balance + ticketInfo.getAmountOfTransaction();
-                newRec = new TransactionReceipt(ticketInfo,true,balance,newBalance);
-                accInfo.setAccountBalance(newBalance);
-                obj.checkTypeDeposit(accType,ticketInfo.getAmountOfTransaction());
-                return newRec;
-            }
-        }else{
-            String reason = "Account is closed.";
-            newRec = new TransactionReceipt(ticketInfo,false,reason);
-            return newRec;
-        }
-    }
+    public abstract TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index);
 
     public TransactionReceipt makeWithdrawal(TransactionTicket ticketInfo, Bank obj, int index){
         TransactionReceipt newRec;
@@ -229,5 +169,29 @@ public class Account {
             return true;
         else
             return false;
+    }
+    // Account toString override
+    public String toString(){
+        Name myName = personInfo.getPersonName();
+
+        String str = String.format("%-12s%-12s%-9s%13s%19s%-3s$%9.2f",
+                myName.getFirstName(),
+                myName.getLastName(),
+                personInfo.getSSN(),
+                this.acctNumber,
+                this.acctType, " ",
+                this.acctBalance);
+        return str;
+    }
+
+    public String toStringAccInfo(){
+        Name myName = personInfo.getPersonName();
+
+        String str =  "Name: " + myName.getFirstName() +"\t"+ myName.getLastName() +"\n"+
+                "Social secruity number: " + personInfo.getSSN() +"\n"+
+                "Account number: " + this.acctNumber +"\n"+
+                "Account type: " + this.acctType +"\n"+
+                String.format("Account Balance: $%.2f\n", this.acctBalance);
+        return str;
     }
 }
