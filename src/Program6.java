@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Scanner;
 
 public class Program6 {
-    public static void main(String[] args) throws FileNotFoundException, ParseException {
+     public static void main(String[] args) throws FileNotFoundException, ParseException {
         Bank bankObj = new Bank();
         TransactionTicket transTicket = new TransactionTicket();
 
@@ -60,15 +60,15 @@ public class Program6 {
                     break;
                 case 's':
                 case 'S':
-                    //closeAccount(bankObj, kybd, outputFile,transTicket);
+                    closeAccount(bankObj, kybd, outputFile,transTicket);
                     break;
                 case 'r':
                 case 'R':
-                    //reopenAccount(bankObj, kybd, outputFile,transTicket);
+                    reopenAccount(bankObj, kybd, outputFile,transTicket);
                     break;
                 case 'x':
                 case 'X':
-                    //deleteAccount(bankObj, kybd, outputFile,transTicket);
+                    deleteAccount(bankObj, kybd, outputFile,transTicket);
                     break;
                 default:
                     outputFile.println("Error: " + choice + " is an invalid selection -  try again");
@@ -442,7 +442,7 @@ public class Program6 {
         }
         outputFile.flush();
     }
-    /*
+
     public static void reopenAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile, TransactionTicket ticket)  {
         TransactionReceipt info;
 
@@ -458,7 +458,7 @@ public class Program6 {
 
             outputFile.println(info.toStringError());
         }else{
-            Account accInfo = new Account();
+            Account accInfo = bankObj.getAccts(index);
             Calendar currentDate = Calendar.getInstance();
 
             ticket = new TransactionTicket(currentDate,"Reopen Account");
@@ -506,6 +506,4 @@ public class Program6 {
         }
         outputFile.flush();
     }
-
- */
 }
