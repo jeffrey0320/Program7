@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.Calendar;
 
 public class CheckingAccount extends Account {
@@ -6,16 +7,76 @@ public class CheckingAccount extends Account {
         super();
     }
 
+    public CheckingAccount(double amount) {
+        super(amount);
+    }
+
     public CheckingAccount(int acctNumber, String acctType, double acctBalance, Depositor personInfo, boolean acctStatus) {
         super(acctNumber, acctType, acctBalance, personInfo, acctStatus);
     }
 
     @Override
     public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index) {
-        return null;
+        TransactionReceipt newRec;
+        Account accInfo;
+        accInfo = obj.getAccts(index);
+        String accType = accInfo.getAccountType();
+
+        if(accInfo.getAccountStatus()){
+            if(ticketInfo.getAmountOfTransaction() <= 0.00){
+                String reason = "Invalid amount.";
+                newRec = new TransactionReceipt(ticketInfo,false,reason);
+                //accInfo.addTransaction(newRec);
+                return  newRec;
+            }else{
+                double balance = accInfo.getAccountBalance();
+                double newBalance = balance + ticketInfo.getAmountOfTransaction();
+                newRec = new TransactionReceipt(ticketInfo,true,balance,newBalance);
+                accInfo.setAccountBalance(newBalance);
+                obj.checkTypeDeposit(accType,ticketInfo.getAmountOfTransaction());
+                //accInfo.addTransaction(newRec);
+                return newRec;
+            }
+        }else{
+            String reason = "Account is closed.";
+            newRec = new TransactionReceipt(ticketInfo,false,reason);
+            //accInfo.addTransaction(newRec);
+            return newRec;
+        }
     }
 
-    public TransactionReceipt clearCheck(Check checkInfo, TransactionTicket info, Bank acc, int index){
+    @Override
+    public TransactionReceipt makeWithdrawal(TransactionTicket ticketInfo, Bank obj, int index) {
+        TransactionReceipt newRec;
+        Account bal = obj.getAccts(index);
+        double balance = bal.getAccountBalance();
+
+        if(bal.getAccountStatus()){
+            if(ticketInfo.getAmountOfTransaction() <= 0.0) {
+                String reason = "Trying to withdraw invalid amount.";
+                newRec = new TransactionReceipt(ticketInfo,false,reason,balance);
+                return newRec;
+            }
+            else if(ticketInfo.getAmountOfTransaction() > balance) {
+                String reason = "Balance has insufficient funds.";
+                newRec = new TransactionReceipt(ticketInfo,false,reason,balance);
+                return newRec;
+            }
+            else {
+                double newBal = balance - ticketInfo.getAmountOfTransaction();
+                newRec = new TransactionReceipt(ticketInfo,true,balance,newBal);
+                bal.setAccountBalance(newBal);
+                //obj.checkTypeWithdraw(bal.getAccountType(),ticketInfo.getAmountOfTransaction());
+                return newRec;
+            }
+        }else{
+            String reason = "Account is closed.";
+            newRec = new TransactionReceipt(ticketInfo,false,reason);
+            return newRec;
+        }
+    }
+
+    public TransactionReceipt clearCheck(Check checkInfo, TransactionTicket info, Bank acc, int index) {
         TransactionReceipt clearedCheck;
         Account bal = acc.getAccts(index);
 
@@ -23,50 +84,51 @@ public class CheckingAccount extends Account {
         Calendar beforeSixMonths = Calendar.getInstance();
         beforeSixMonths.add(Calendar.MONTH, -6);
         Calendar check = checkInfo.getDateOfCheck();
-        check.add(Calendar.MONTH,6);
 
-        if(bal.getAccountStatus()){
-            if(timeNow.before(check)) {
+        check.add(Calendar.MONTH, 6);
+        System.out.println(check.getTime());
+        timeNow.clear(Calendar.HOUR_OF_DAY);
+        timeNow.clear(Calendar.HOUR);
+        timeNow.clear(Calendar.AM_PM);
+        timeNow.clear(Calendar.MINUTE);
+        timeNow.clear(Calendar.SECOND);
+        timeNow.clear(Calendar.MILLISECOND);
+        System.out.println("Time now " + timeNow.getTime());
+
+        if (bal.getAccountStatus()) {
+            if (timeNow.before(check) || timeNow.equals(check)) {
 
                 double drawAmount = checkInfo.getCheckAmount();
                 bal = acc.getAccts(index);
-                double balance =  bal.getAccountBalance();
+                double balance = bal.getAccountBalance();
 
-                if(drawAmount <= 0.0)
-                {
+                if (drawAmount <= 0.0) {
                     String reason = "Trying to withdraw invalid amount.";
-                    clearedCheck = new TransactionReceipt(info,false,reason,balance);
+                    clearedCheck = new TransactionReceipt(info, false, reason, balance);
                     return clearedCheck;
-                }
-                else if(drawAmount > balance)
-                {
+                } else if (drawAmount > balance) {
                     String reason = "Balance has insufficient funds. You have been charged a $2.50 service fee. ";
                     final double fee = 2.50;
                     double newBal = balance - fee;
-                    clearedCheck = new TransactionReceipt(info,false,reason,balance,newBal);
-                    bal = new Account(newBal);
-                    //bal.setAccountBalance(newBal);
-                    acc.checkTypeWithdraw(bal.getAccountType(),fee);
+                    clearedCheck = new TransactionReceipt(info, false, reason, balance, newBal);
+                    bal.setAccountBalance(newBal);
+                    //acc.checkTypeWithdraw(bal.getAccountType(), fee);
                     return clearedCheck;
-                }
-                else
-                {
+                } else {
                     double newBal = balance - drawAmount;
-                    clearedCheck = new TransactionReceipt(info,true,balance,newBal);
-                    bal = new Account(newBal);
-                    acc.checkTypeWithdraw(bal.getAccountType(),drawAmount);
+                    clearedCheck = new TransactionReceipt(info, true, balance, newBal);
+                    bal.setAccountBalance(newBal);
+                    //acc.checkTypeWithdraw(bal.getAccountType(), drawAmount);
                     return clearedCheck;
                 }
-            }
-            else
-            {
+            } else {
                 String reason = "The date on the check is more than 6 months ago.";
-                clearedCheck = new TransactionReceipt(info,false,reason);
+                clearedCheck = new TransactionReceipt(info, false, reason);
                 return clearedCheck;
             }
-        }else{
+        } else {
             String reason = "Account is closed.";
-            clearedCheck = new TransactionReceipt(info,false,reason);
+            clearedCheck = new TransactionReceipt(info, false, reason);
             return clearedCheck;
         }
     }

@@ -16,7 +16,6 @@ public abstract class Account {
         arrayOfReceipts = new ArrayList<>();
     }
 
-
     public Account(int acctNumber, String acctType, double acctBalance, Depositor personInfo, boolean acctStatus){
         this.acctNumber = acctNumber;
         this.acctType = acctType;
@@ -42,6 +41,10 @@ public abstract class Account {
         this.arrayOfReceipts = copy.arrayOfReceipts;
     }
 
+    public Account(double amount){
+        this.acctBalance = amount;
+    }
+
     public TransactionReceipt getBalance(TransactionTicket ticketInfo, Bank obj, int index){
         TransactionReceipt newRec;
         Account accInfo = obj.getAccts(index);
@@ -65,35 +68,7 @@ public abstract class Account {
 
     public abstract TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index);
 
-    public TransactionReceipt makeWithdrawal(TransactionTicket ticketInfo, Bank obj, int index){
-        TransactionReceipt newRec;
-        Account bal = obj.getAccts(index);
-        double balance = bal.getAccountBalance();
-
-        if(bal.getAccountStatus()){
-            if(ticketInfo.getAmountOfTransaction() <= 0.0) {
-                String reason = "Trying to withdraw invalid amount.";
-                newRec = new TransactionReceipt(ticketInfo,false,reason,balance);
-                return newRec;
-            }
-            else if(ticketInfo.getAmountOfTransaction() > balance) {
-                String reason = "Balance has insufficient funds.";
-                newRec = new TransactionReceipt(ticketInfo,false,reason,balance);
-                return newRec;
-            }
-            else {
-                double newBal = balance - ticketInfo.getAmountOfTransaction();
-                newRec = new TransactionReceipt(ticketInfo,true,balance,newBal);
-                bal.setAccountBalance(newBal);
-                obj.checkTypeWithdraw(bal.getAccountType(),ticketInfo.getAmountOfTransaction());
-                return newRec;
-            }
-        }else{
-            String reason = "Account is closed.";
-            newRec = new TransactionReceipt(ticketInfo,false,reason);
-            return newRec;
-        }
-    }
+    public abstract TransactionReceipt makeWithdrawal(TransactionTicket ticketInfo, Bank obj, int index);
 
     public TransactionReceipt closeAccount(TransactionTicket ticketInfo, Bank obj, int index){
         TransactionReceipt close;
@@ -160,7 +135,7 @@ public abstract class Account {
         return arrayOfReceipts;
     }
 
-    private void setAccountBalance(double amount){
+    protected void setAccountBalance(double amount){
         this.acctBalance = amount;
     }
 

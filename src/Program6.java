@@ -36,7 +36,7 @@ public class Program6 {
                     break;
                 case 'i':
                 case 'I':
-                    acctInfo(bankObj, kybd, outputFile);
+                    //acctInfo(bankObj, kybd, outputFile);
                     break;
                 case 'd':
                 case 'D':
@@ -52,7 +52,7 @@ public class Program6 {
                     break;
                 case 'n':
                 case 'N':
-                    newAccount(bankObj, kybd, outputFile,transTicket);
+                    //newAccount(bankObj, kybd, outputFile,transTicket);
                     break;
                 case 'h':
                 case 'H':
@@ -60,15 +60,15 @@ public class Program6 {
                     break;
                 case 's':
                 case 'S':
-                    closeAccount(bankObj, kybd, outputFile,transTicket);
+                    //closeAccount(bankObj, kybd, outputFile,transTicket);
                     break;
                 case 'r':
                 case 'R':
-                    reopenAccount(bankObj, kybd, outputFile,transTicket);
+                    //reopenAccount(bankObj, kybd, outputFile,transTicket);
                     break;
                 case 'x':
                 case 'X':
-                    deleteAccount(bankObj, kybd, outputFile,transTicket);
+                    //deleteAccount(bankObj, kybd, outputFile,transTicket);
                     break;
                 default:
                     outputFile.println("Error: " + choice + " is an invalid selection -  try again");
@@ -177,9 +177,7 @@ public class Program6 {
     }
 
     public static void deposit(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) throws ParseException {
-
         Calendar currentDate;
-
         int requestedAccount;
         int index;
         // prompt for account number
@@ -202,8 +200,6 @@ public class Program6 {
             double amountToDeposit = kybd.nextDouble();
 
             if(accType.equals("CD")){
-
-
                 System.out.print("Enter CD term: ");
                 int amountOfTerm = kybd.nextInt();
 
@@ -212,7 +208,7 @@ public class Program6 {
 
                 currentDate = Calendar.getInstance();
                 ticket = new TransactionTicket(currentDate,"Deposit",amountToDeposit,amountOfTerm);
-                customerAcct = new CDAccount();
+                customerAcct = new CDAccount(dateOfMature);
                 TransactionReceipt depReceipt = customerAcct.makeDeposit(ticket,bankObj,index);
 
                 if(depReceipt.getSuccessIndicatorFlag()){
@@ -270,7 +266,8 @@ public class Program6 {
 
                 currentDate = Calendar.getInstance();
                 ticket = new TransactionTicket(currentDate, "Withdrawal", amountToDeposit, amountOfTerm);
-                TransactionReceipt depReceipt = customerAcct.makeWithdrawalCD(ticket, bankObj, index, dateOfMature);
+                customerAcct = new CDAccount(dateOfMature);
+                TransactionReceipt depReceipt = customerAcct.makeWithdrawal(ticket, bankObj, index);
 
                 if(depReceipt.getSuccessIndicatorFlag()) {
                     outputFile.println(depReceipt.toString(bankObj,index));
@@ -354,7 +351,7 @@ public class Program6 {
         }
         outputFile.flush();
     }
-
+    /*
     public static void acctInfo(Bank bankObj, Scanner kybd, PrintWriter outputFile) {
         Account accInfo;
         String requestedAccount;
@@ -389,6 +386,7 @@ public class Program6 {
                 String type = kybd.next();
 
                 String[] customerInfo = {first,last,ssn,type};
+
                 Calendar date = Calendar.getInstance();
                 ticket = new TransactionTicket(date,"New Account");
                 newReceipt = bankObj.openNewAccount(ticket,bankObj,customerInfo,newAccount);
@@ -508,4 +506,6 @@ public class Program6 {
         }
         outputFile.flush();
     }
+
+ */
 }

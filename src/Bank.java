@@ -52,6 +52,8 @@ public class Bank {
 
     public TransactionReceipt openNewAccount(TransactionTicket ticket, Bank obj, String[] customerInfo, int acctNum){
         TransactionReceipt openRec;
+        Account allInfo;
+        final int INITIAL_BAL = 0;
 
         boolean isEmpty = false;
         for(int i=0;i<customerInfo.length-1;i++){
@@ -65,8 +67,16 @@ public class Bank {
             openRec = new TransactionReceipt(ticket,false,reason);
             return openRec;
         }else{
-            Account newAcct = new Account(customerInfo[0],customerInfo[1],customerInfo[2],customerInfo[3],acctNum,true);
-            obj.arrayOfAccounts.add(arrayOfAccounts.size(),newAcct);
+            Name newName = new Name(customerInfo[0],customerInfo[1]);
+            Depositor newInfo = new Depositor(customerInfo[2],newName);
+            if(customerInfo[3].equals("Checking")){
+                allInfo = new CheckingAccount(acctNum,customerInfo[3],INITIAL_BAL,newInfo,true);
+            }else if(customerInfo[3].equals("Savings")) {
+                allInfo = new SavingsAccount(acctNum,customerInfo[3],INITIAL_BAL,newInfo,true);
+            }else{
+                allInfo = new CDAccount(acctNum,customerInfo[3],INITIAL_BAL,newInfo,true);
+            }
+            obj.arrayOfAccounts.add(arrayOfAccounts.size(),allInfo);
             openRec = new TransactionReceipt(ticket,true,0);
             return openRec;
         }
