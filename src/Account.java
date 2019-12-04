@@ -162,7 +162,7 @@ public abstract class Account {
     public String toStringAccInfo(){
         Name myName = personInfo.getPersonName();
 
-        String str =  "Name: " + myName.getFirstName() +"\t"+ myName.getLastName() +"\n"+
+        String str =  "Name: " + myName.getFirstName() +" "+ myName.getLastName() +"\n"+
                 "Social secruity number: " + personInfo.getSSN() +"\n"+
                 "Account number: " + this.acctNumber +"\n"+
                 "Account type: " + this.acctType +"\n"+

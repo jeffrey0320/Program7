@@ -41,5 +41,11 @@ public class Check {
     public Calendar getDateOfCheck() {
         return calFormat;
     }
+
+    public String toString(){
+        String str = "Account number: " + accountNumber + "\n"+
+                     "Check date: " + calFormat.getTime();
+        return str;
+    }
 }
 

@@ -18,8 +18,7 @@ public class CheckingAccount extends Account {
     @Override
     public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index) {
         TransactionReceipt newRec;
-        Account accInfo;
-        accInfo = obj.getAccts(index);
+        Account accInfo = obj.getAccts(index);
         String accType = accInfo.getAccountType();
 
         if(accInfo.getAccountStatus()){
@@ -132,4 +131,5 @@ public class CheckingAccount extends Account {
             return clearedCheck;
         }
     }
+
 }

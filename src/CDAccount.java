@@ -63,9 +63,49 @@ public class CDAccount extends Account {
     }
 
     @Override
-    public TransactionReceipt makeWithdrawal(TransactionTicket ticketInfo, Bank obj,
-                                             int index) {
-        return null;
+    public TransactionReceipt makeWithdrawal(TransactionTicket ticketInfo, Bank obj, int index) {
+        TransactionReceipt cdRec;
+        Calendar timeNow = Calendar.getInstance();
+        Calendar newDate = Calendar.getInstance();
+        Account accInfo = obj.getAccts(index);
+
+
+        double balance = accInfo.getAccountBalance();
+
+        if(accInfo.getAccountStatus()){
+            if(this.maturityDate.before(timeNow) || this.maturityDate.equals(timeNow)){
+                if(ticketInfo.getAmountOfTransaction() <= 0.00){
+                    String reason = "Invalid amount.";
+                    cdRec = new TransactionReceipt(ticketInfo,false,reason);
+                    //accInfo.addTransaction(cdRec);
+                    return  cdRec;
+                }else if(ticketInfo.getAmountOfTransaction() > balance)
+                {
+                    String reason = "Balance has insufficient funds.";
+                    cdRec = new TransactionReceipt(ticketInfo,false,reason,balance);
+                    //accInfo.addTransaction(cdRec);
+                    return cdRec;
+                }else{
+                    double newBalance = balance - ticketInfo.getAmountOfTransaction();
+                    newDate.add(Calendar.MONTH,ticketInfo.getTermOfCD());
+                    cdRec = new TransactionReceipt(ticketInfo,true,balance,newBalance,newDate);
+                    accInfo.setAccountBalance(newBalance);
+                    obj.checkTypeWithdraw(accInfo.getAccountType(),ticketInfo.getAmountOfTransaction());
+                    //accInfo.addTransaction(cdRec);
+                    return cdRec;
+                }
+            }else{
+                String reason = "Term has not ended.";
+                cdRec = new TransactionReceipt(ticketInfo,false,reason);
+                //accInfo.addTransaction(cdRec);
+                return cdRec;
+            }
+        }else{
+            String reason = "Account is closed.";
+            cdRec = new TransactionReceipt(ticketInfo,false,reason);
+            //accInfo.addTransaction(cdRec);
+            return cdRec;
+        }
     }
 
     public Calendar getMaturityDate(){

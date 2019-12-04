@@ -36,7 +36,7 @@ public class Program6 {
                     break;
                 case 'i':
                 case 'I':
-                    //acctInfo(bankObj, kybd, outputFile);
+                    acctInfo(bankObj, kybd, outputFile);
                     break;
                 case 'd':
                 case 'D':
@@ -52,7 +52,7 @@ public class Program6 {
                     break;
                 case 'n':
                 case 'N':
-                    //newAccount(bankObj, kybd, outputFile,transTicket);
+                    newAccount(bankObj, kybd, outputFile,transTicket);
                     break;
                 case 'h':
                 case 'H':
@@ -333,7 +333,7 @@ public class Program6 {
                 receiptInfo = checkingInfo.clearCheck(checkInfo,newTicket,bankObj,index);
 
                 if(receiptInfo.getSuccessIndicatorFlag()){
-                    outputFile.println(receiptInfo.toString(bankObj,index));
+                    outputFile.print(receiptInfo.toString(bankObj,index));
                 }else{
                     outputFile.println(receiptInfo.toStringError());
                 }
@@ -351,7 +351,7 @@ public class Program6 {
         }
         outputFile.flush();
     }
-    /*
+
     public static void acctInfo(Bank bankObj, Scanner kybd, PrintWriter outputFile) {
         Account accInfo;
         String requestedAccount;
@@ -426,7 +426,7 @@ public class Program6 {
 
             outputFile.println(info.toStringError());
         }else{
-            Account accInfo = new Account();
+            Account accInfo = bankObj.getAccts(index);
             Calendar currentDate = Calendar.getInstance();
 
             ticket = new TransactionTicket(currentDate,"Close Account");
@@ -442,7 +442,7 @@ public class Program6 {
         }
         outputFile.flush();
     }
-
+    /*
     public static void reopenAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile, TransactionTicket ticket)  {
         TransactionReceipt info;
 

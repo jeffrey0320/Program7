@@ -40,7 +40,6 @@ public class TransactionReceipt {
             return str;
         }
     }
-
     // no-args constructor
     public TransactionReceipt(){
         ticket = new TransactionTicket();
