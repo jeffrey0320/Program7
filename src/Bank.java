@@ -108,6 +108,13 @@ public class Bank {
         return -1;
     }
 
+    public int acctUsingSSN(String reqAccount){
+        for (int index = 0; index < arrayOfAccounts.size(); index++)
+            if (arrayOfAccounts.get(index).getPersonInfo().getSSN().equals(reqAccount))
+                return index;
+        return -1;
+    }
+
     public Account getAccts(int index){
         return arrayOfAccounts.get(index);
     }

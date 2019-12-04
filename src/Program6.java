@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
 
@@ -56,7 +57,7 @@ public class Program6 {
                     break;
                 case 'h':
                 case 'H':
-                    //transactionHistory(bankObj, kybd, outputFile);
+                    transactionHistory(bankObj, kybd, outputFile, transTicket);
                     break;
                 case 's':
                 case 'S':
@@ -503,6 +504,65 @@ public class Program6 {
                 //cant delete
                 outputFile.println(newReceipt.toStringError());
             }
+        }
+        outputFile.flush();
+    }
+
+    private static void transactionHistory(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) {
+        Account accInfo;
+        Calendar date = Calendar.getInstance();
+        ArrayList<TransactionReceipt> newAL;
+
+        String requestedAccount;
+        // prompt for account number
+        System.out.print("Enter social security number: ");
+        requestedAccount = kybd.next(); // read-in the SSN
+
+        int index = bankObj.acctUsingSSN(requestedAccount);
+
+        if(index == -1){
+            // Account not found
+            ticket = new TransactionTicket(date,"Transaction History");
+            TransactionReceipt newRec = new TransactionReceipt(ticket,false,"Account not found");
+
+            outputFile.println("Transaction Requested: " + newRec.getTicket().getTypeOfTransaction());
+            outputFile.println("Date of Transaction: " + newRec.getTicket().getDateOfTransaction().getTime());
+            outputFile.println("Error: " + newRec.getReasonForFailureString());
+            outputFile.println();
+        }else{
+            accInfo = bankObj.getAccts(index);
+
+            ticket = new TransactionTicket(date,"Transaction History");
+            newAL = accInfo.getTransactionHistory(ticket,bankObj,index);
+
+            outputFile.println("Transaction Requested: Transaction History");
+            outputFile.println(accInfo.toStringAccInfo());
+
+            for(TransactionReceipt newRec : newAL){
+                if(newRec.getSuccessIndicatorFlag()){
+                    if(newRec.getTicket().getTypeOfTransaction().equals("Balance Inquiry")){
+                        outputFile.println(newRec.toString(bankObj,index));
+                    }else if(newRec.getTicket().getTypeOfTransaction().equals("Account Info")){
+                        outputFile.println("Transaction Requested: Account Info");
+                        outputFile.println(accInfo.toStringAccInfo());
+                        outputFile.println();
+                    }else if(newRec.getTicket().getTypeOfTransaction().equals("Close Account")){
+                        outputFile.println(ticket.toString());
+                        outputFile.println("Account has been closed");
+                        outputFile.println();
+                    }else if(newRec.getTicket().getTypeOfTransaction().equals("Reopen Account")) {
+                        outputFile.println(ticket.toString());
+                        outputFile.println("Account has been reopened");
+                        outputFile.println();
+                    }else{
+                        outputFile.println(newRec.toString(bankObj,index));
+                    }
+                }else{
+                    outputFile.println(newRec.toStringError());
+                }
+            }
+            outputFile.println("End of Transaction History.");
+            outputFile.println();
         }
         outputFile.flush();
     }

@@ -25,7 +25,7 @@ public class CheckingAccount extends Account {
             if(ticketInfo.getAmountOfTransaction() <= 0.00){
                 String reason = "Invalid amount.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason);
-                //accInfo.addTransaction(newRec);
+                accInfo.addTransaction(newRec);
                 return  newRec;
             }else{
                 double balance = accInfo.getAccountBalance();
@@ -33,13 +33,13 @@ public class CheckingAccount extends Account {
                 newRec = new TransactionReceipt(ticketInfo,true,balance,newBalance);
                 accInfo.setAccountBalance(newBalance);
                 obj.checkTypeDeposit(accType,ticketInfo.getAmountOfTransaction());
-                //accInfo.addTransaction(newRec);
+                accInfo.addTransaction(newRec);
                 return newRec;
             }
         }else{
             String reason = "Account is closed.";
             newRec = new TransactionReceipt(ticketInfo,false,reason);
-            //accInfo.addTransaction(newRec);
+            accInfo.addTransaction(newRec);
             return newRec;
         }
     }
@@ -54,23 +54,27 @@ public class CheckingAccount extends Account {
             if(ticketInfo.getAmountOfTransaction() <= 0.0) {
                 String reason = "Trying to withdraw invalid amount.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason,balance);
+                bal.addTransaction(newRec);
                 return newRec;
             }
             else if(ticketInfo.getAmountOfTransaction() > balance) {
                 String reason = "Balance has insufficient funds.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason,balance);
+                bal.addTransaction(newRec);
                 return newRec;
             }
             else {
                 double newBal = balance - ticketInfo.getAmountOfTransaction();
                 newRec = new TransactionReceipt(ticketInfo,true,balance,newBal);
                 bal.setAccountBalance(newBal);
-                //obj.checkTypeWithdraw(bal.getAccountType(),ticketInfo.getAmountOfTransaction());
+                obj.checkTypeWithdraw(bal.getAccountType(),ticketInfo.getAmountOfTransaction());
+                bal.addTransaction(newRec);
                 return newRec;
             }
         }else{
             String reason = "Account is closed.";
             newRec = new TransactionReceipt(ticketInfo,false,reason);
+            bal.addTransaction(newRec);
             return newRec;
         }
     }
@@ -104,6 +108,7 @@ public class CheckingAccount extends Account {
                 if (drawAmount <= 0.0) {
                     String reason = "Trying to withdraw invalid amount.";
                     clearedCheck = new TransactionReceipt(info, false, reason, balance);
+                    bal.addTransaction(clearedCheck);
                     return clearedCheck;
                 } else if (drawAmount > balance) {
                     String reason = "Balance has insufficient funds. You have been charged a $2.50 service fee. ";
@@ -111,13 +116,15 @@ public class CheckingAccount extends Account {
                     double newBal = balance - fee;
                     clearedCheck = new TransactionReceipt(info, false, reason, balance, newBal);
                     bal.setAccountBalance(newBal);
-                    //acc.checkTypeWithdraw(bal.getAccountType(), fee);
+                    acc.checkTypeWithdraw(bal.getAccountType(), fee);
+                    bal.addTransaction(clearedCheck);
                     return clearedCheck;
                 } else {
                     double newBal = balance - drawAmount;
                     clearedCheck = new TransactionReceipt(info, true, balance, newBal);
                     bal.setAccountBalance(newBal);
-                    //acc.checkTypeWithdraw(bal.getAccountType(), drawAmount);
+                    acc.checkTypeWithdraw(bal.getAccountType(), drawAmount);
+                    bal.addTransaction(clearedCheck);
                     return clearedCheck;
                 }
             } else {

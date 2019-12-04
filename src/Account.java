@@ -52,15 +52,18 @@ public abstract class Account {
         if(index == -1) {
             String reason = "Account not found. ";
             newRec = new TransactionReceipt(ticketInfo,false,reason);
+            accInfo.addTransaction(newRec);
             return newRec;
         }else{
             if(accInfo.getAccountStatus()){
                 double balance = accInfo.getAccountBalance();
                 newRec = new TransactionReceipt(ticketInfo, true, balance);
+                accInfo.addTransaction(newRec);
                 return  newRec;
             }else{
                 String reason = "Account is closed.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason);
+                accInfo.addTransaction(newRec);
                 return newRec;
             }
         }
@@ -77,34 +80,45 @@ public abstract class Account {
         if(accInfo.getAccountBalance()>0){
             String reason = "Account cant be close, Withdraw first.";
             close = new TransactionReceipt(ticketInfo,false,reason);
+            accInfo.addTransaction(close);
             return close;
         }else{
             if(obj.getAccts(index).acctStatus){
                 accInfo = obj.getAccts(index);
                 accInfo.setAccountStatus(false);
                 close = new TransactionReceipt(ticketInfo,true);
+                accInfo.addTransaction(close);
                 return close;
             }else{
                 String reason = "Account is closed already.";
                 close = new TransactionReceipt(ticketInfo,false,reason);
+                accInfo.addTransaction(close);
                 return close;
             }
         }
     }
 
     public TransactionReceipt reopenAccount(TransactionTicket ticketInfo, Bank obj, int index){
-        TransactionReceipt close;
+        TransactionReceipt reOpen;
         Account accInfo = obj.getAccts(index);
 
         if(obj.getAccts(index).acctStatus){
             String reason = "Account is active.";
-            close = new TransactionReceipt(ticketInfo,false,reason);
-            return close;
+            reOpen = new TransactionReceipt(ticketInfo,false,reason);
+            accInfo.addTransaction(reOpen);
+            return reOpen;
         }else{
             accInfo.setAccountStatus(true);
-            close = new TransactionReceipt(ticketInfo,true);
-            return close;
+            reOpen = new TransactionReceipt(ticketInfo,true);
+            accInfo.addTransaction(reOpen);
+            return reOpen;
         }
+    }
+
+    public ArrayList<TransactionReceipt> getTransactionHistory(TransactionTicket ticket, Bank obj, int index) {
+        Account accInfo = obj.getAccts(index);
+        ArrayList<TransactionReceipt> allReceipts = accInfo.arrayOfReceipts;
+        return allReceipts;
     }
 
     private void setAccountStatus(boolean b) {
@@ -131,8 +145,8 @@ public abstract class Account {
         return acctBalance;
     }
 
-    public ArrayList<TransactionReceipt> getArrayOfReceipts() {
-        return arrayOfReceipts;
+    public void addTransaction(TransactionReceipt receipt){
+        arrayOfReceipts.add(receipt);
     }
 
     protected void setAccountBalance(double amount){

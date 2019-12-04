@@ -36,7 +36,7 @@ public class CDAccount extends Account {
                 if(ticketInfo.getAmountOfTransaction() <= 0.00){
                     String reason = "Invalid amount.";
                     cdRec = new TransactionReceipt(ticketInfo,false,reason);
-                    //accInfo.addTransaction(cdRec);
+                    accInfo.addTransaction(cdRec);
                     return  cdRec;
                 }else{
                     double acctBalance = accInfo.getAccountBalance();
@@ -45,19 +45,19 @@ public class CDAccount extends Account {
                     cdRec = new TransactionReceipt(ticketInfo,true,acctBalance,newBalance,newDate);
                     accInfo.setAccountBalance(newBalance);
                     obj.checkTypeDeposit(acctType,ticketInfo.getAmountOfTransaction());
-                    //accInfo.addTransaction(cdRec);
+                    accInfo.addTransaction(cdRec);
                     return cdRec;
                 }
             }else{
                 String reason = "Term has not ended.";
                 cdRec = new TransactionReceipt(ticketInfo,false,reason);
-                //accInfo.addTransaction(cdRec);
+                accInfo.addTransaction(cdRec);
                 return cdRec;
             }
         }else{
             String reason = "Account is closed.";
             cdRec = new TransactionReceipt(ticketInfo,false,reason);
-            //accInfo.addTransaction(cdRec);
+            accInfo.addTransaction(cdRec);
             return cdRec;
         }
     }
@@ -69,7 +69,6 @@ public class CDAccount extends Account {
         Calendar newDate = Calendar.getInstance();
         Account accInfo = obj.getAccts(index);
 
-
         double balance = accInfo.getAccountBalance();
 
         if(accInfo.getAccountStatus()){
@@ -77,13 +76,13 @@ public class CDAccount extends Account {
                 if(ticketInfo.getAmountOfTransaction() <= 0.00){
                     String reason = "Invalid amount.";
                     cdRec = new TransactionReceipt(ticketInfo,false,reason);
-                    //accInfo.addTransaction(cdRec);
+                    accInfo.addTransaction(cdRec);
                     return  cdRec;
                 }else if(ticketInfo.getAmountOfTransaction() > balance)
                 {
                     String reason = "Balance has insufficient funds.";
                     cdRec = new TransactionReceipt(ticketInfo,false,reason,balance);
-                    //accInfo.addTransaction(cdRec);
+                    accInfo.addTransaction(cdRec);
                     return cdRec;
                 }else{
                     double newBalance = balance - ticketInfo.getAmountOfTransaction();
@@ -91,19 +90,19 @@ public class CDAccount extends Account {
                     cdRec = new TransactionReceipt(ticketInfo,true,balance,newBalance,newDate);
                     accInfo.setAccountBalance(newBalance);
                     obj.checkTypeWithdraw(accInfo.getAccountType(),ticketInfo.getAmountOfTransaction());
-                    //accInfo.addTransaction(cdRec);
+                    accInfo.addTransaction(cdRec);
                     return cdRec;
                 }
             }else{
                 String reason = "Term has not ended.";
                 cdRec = new TransactionReceipt(ticketInfo,false,reason);
-                //accInfo.addTransaction(cdRec);
+                accInfo.addTransaction(cdRec);
                 return cdRec;
             }
         }else{
             String reason = "Account is closed.";
             cdRec = new TransactionReceipt(ticketInfo,false,reason);
-            //accInfo.addTransaction(cdRec);
+            accInfo.addTransaction(cdRec);
             return cdRec;
         }
     }

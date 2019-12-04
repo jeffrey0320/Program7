@@ -19,7 +19,7 @@ public class SavingsAccount extends Account {
             if(ticketInfo.getAmountOfTransaction() <= 0.00){
                 String reason = "Invalid amount.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason);
-                //accInfo.addTransaction(newRec);
+                accInfo.addTransaction(newRec);
                 return  newRec;
             }else{
                 double balance = accInfo.getAccountBalance();
@@ -27,13 +27,13 @@ public class SavingsAccount extends Account {
                 newRec = new TransactionReceipt(ticketInfo,true,balance,newBalance);
                 accInfo.setAccountBalance(newBalance);
                 obj.checkTypeDeposit(accType,ticketInfo.getAmountOfTransaction());
-                //accInfo.addTransaction(newRec);
+                accInfo.addTransaction(newRec);
                 return newRec;
             }
         }else{
             String reason = "Account is closed.";
             newRec = new TransactionReceipt(ticketInfo,false,reason);
-            //accInfo.addTransaction(newRec);
+            accInfo.addTransaction(newRec);
             return newRec;
         }
     }
@@ -48,11 +48,13 @@ public class SavingsAccount extends Account {
             if(ticketInfo.getAmountOfTransaction() <= 0.0) {
                 String reason = "Trying to withdraw invalid amount.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason,balance);
+                bal.addTransaction(newRec);
                 return newRec;
             }
             else if(ticketInfo.getAmountOfTransaction() > balance) {
                 String reason = "Balance has insufficient funds.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason,balance);
+                bal.addTransaction(newRec);
                 return newRec;
             }
             else {
@@ -60,11 +62,13 @@ public class SavingsAccount extends Account {
                 newRec = new TransactionReceipt(ticketInfo,true,balance,newBal);
                 bal.setAccountBalance(newBal);
                 obj.checkTypeWithdraw(bal.getAccountType(),ticketInfo.getAmountOfTransaction());
+                bal.addTransaction(newRec);
                 return newRec;
             }
         }else{
             String reason = "Account is closed.";
             newRec = new TransactionReceipt(ticketInfo,false,reason);
+            bal.addTransaction(newRec);
             return newRec;
         }
     }

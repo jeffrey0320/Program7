@@ -26,42 +26,42 @@ Total amount in all CD Accounts: $84054.16
 Total amount in all Accounts: $221637.98
 
 Transaction type: Balance Inquiry
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Current Balance: $4119.46
 
 Transaction type: Deposit
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Previous Balance: $4119.46
 Current Balance: $4319.46
 
 Transaction type: Deposit
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Previous Balance: $4084.03
 Current Balance: $5284.03
 
 Transaction type: Balance Inquiry
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Current Balance: $4319.46
 
 Transaction type: Withdrawal
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Previous Balance: $4319.46
 Current Balance: $2319.46
 
 Transaction type: Balance Inquiry
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Current Balance: $2319.46
 
 Transaction type: Clear a check
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Error: The date on the check is more than 6 months ago.
 
 Transaction type: Clear a check
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Error: Account is not Checking
 
 Transaction type: Clear a check
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Previous Balance: $95436.67
 Current Balance: $3436.67
 Transaction Requested: Account Info
@@ -79,7 +79,7 @@ Account type: Savings
 Account Balance: $10150.00
 
 Transaction Requested: New Account
-Transaction Date: Wed Dec 04 15:24:33 EST 2019
+Transaction Date: Wed Dec 04 16:16:02 EST 2019
 Account number 543759 has been created.
 Name: Manuel Julia
 Social secruity number: 159807200
@@ -88,7 +88,7 @@ Account type: Checking
 Account Balance: $0.00
 
 Transaction Requested: New Account
-Transaction Date: Wed Dec 04 15:24:33 EST 2019
+Transaction Date: Wed Dec 04 16:16:02 EST 2019
 Account number 701172 has been created.
 Name: Jessie Mcgee
 Social secruity number: 423780709
@@ -97,7 +97,7 @@ Account type: Savings
 Account Balance: $0.00
 
 Transaction Requested: New Account
-Transaction Date: Wed Dec 04 15:24:33 EST 2019
+Transaction Date: Wed Dec 04 16:16:02 EST 2019
 Account number 233877 has been created.
 Name: Terrence Kim
 Social secruity number: 552174522
@@ -106,44 +106,92 @@ Account type: Checking
 Account Balance: $0.00
 
 Transaction type: Close Account
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Error: Account cant be close, Withdraw first.
 
 Transaction type: Withdrawal
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Previous Balance: $2319.46
 Current Balance: $0.00
 
 Transaction Requested: Close Account
-Transaction Date: Wed Dec 04 15:24:33 EST 2019
+Transaction Date: Wed Dec 04 16:16:02 EST 2019
 Account has been closed.
 
 Transaction Requested: Reopen Account
-Transaction Date: Wed Dec 04 15:24:33 EST 2019
+Transaction Date: Wed Dec 04 16:16:02 EST 2019
 Account has been reopened.
 
 Transaction type: Deposit
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Previous Balance: $0.00
 Current Balance: $2000.00
 
 Transaction type: Deposit
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Previous Balance: $0.00
 Current Balance: $50000.00
 
 Transaction type: Delete an Account
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Error: Account has a balance, Withdraw your balance and try again.
 
 Transaction type: Withdrawal
-Date of Transaction: Wed Dec 04 15:24:33 EST 2019
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
 Previous Balance: $143.34
 Current Balance: $0.00
 
 Transaction Requested: Delete an Account
-Transaction Date: Wed Dec 04 15:24:33 EST 2019
+Transaction Date: Wed Dec 04 16:16:02 EST 2019
 Account 598285 has been deleted.
+
+Transaction Requested: Transaction History
+Name: Noel Eaton
+Social secruity number: 287481077
+Account number: 439665
+Account type: Checking
+Account Balance: $0.00
+
+Transaction type: Balance Inquiry
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
+Current Balance: $4119.46
+
+Transaction type: Deposit
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
+Previous Balance: $4119.46
+Current Balance: $4319.46
+
+Transaction type: Balance Inquiry
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
+Current Balance: $4319.46
+
+Transaction type: Withdrawal
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
+Previous Balance: $4319.46
+Current Balance: $2319.46
+
+Transaction type: Balance Inquiry
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
+Current Balance: $2319.46
+
+Transaction type: Close Account
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
+Error: Account cant be close, Withdraw first.
+
+Transaction type: Withdrawal
+Date of Transaction: Wed Dec 04 16:16:02 EST 2019
+Previous Balance: $2319.46
+Current Balance: $0.00
+
+Transaction Requested: Transaction History
+Transaction Date: Wed Dec 04 16:16:02 EST 2019
+Account has been closed
+
+Transaction Requested: Transaction History
+Transaction Date: Wed Dec 04 16:16:02 EST 2019
+Account has been reopened
+
+End of Transaction History.
 
 				Clients in the Database
 
@@ -170,7 +218,7 @@ Jessie      Mcgee       423780709       701172            Savings   $     0.00
 Terrence    Kim         552174522       233877           Checking   $  2000.00
 
 Total amount in all Savings Accounts: $30013.07
-Total amount in all Checking Accounts: $160970.75
+Total amount in all Checking Accounts: $64507.95
 Total amount in all CD Accounts: $84054.16
-Total amount in all Accounts: $275037.98
+Total amount in all Accounts: $178575.18
 
