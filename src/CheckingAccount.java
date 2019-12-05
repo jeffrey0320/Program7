@@ -7,10 +7,6 @@ public class CheckingAccount extends Account {
         super();
     }
 
-    public CheckingAccount(double amount) {
-        super(amount);
-    }
-
     public CheckingAccount(int acctNumber, String acctType, double acctBalance, Depositor personInfo, boolean acctStatus) {
         super(acctNumber, acctType, acctBalance, personInfo, acctStatus);
     }

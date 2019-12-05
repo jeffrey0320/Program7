@@ -41,10 +41,6 @@ public abstract class Account {
         this.arrayOfReceipts = copy.arrayOfReceipts;
     }
 
-    public Account(double amount){
-        this.acctBalance = amount;
-    }
-
     public TransactionReceipt getBalance(TransactionTicket ticketInfo, Bank obj, int index){
         TransactionReceipt newRec;
         Account accInfo = obj.getAccts(index);
