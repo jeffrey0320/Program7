@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Scanner;
 
 public class Program6 {
-     public static void main(String[] args) throws FileNotFoundException, ParseException {
+     public static void main(String[] args) throws FileNotFoundException, ParseException, InvalidAccountException, InvalidMenuSelection {
         Bank bankObj = new Bank();
         TransactionTicket transTicket = new TransactionTicket();
 
@@ -23,59 +23,60 @@ public class Program6 {
         printAccts(bankObj, outputFile);
 
         do{
-            menu();
-            choice = kybd.next(".").charAt(0);
-            switch (choice) {
-                case 'q':
-                case 'Q':
-                    notDone = false;
-                    printAccts(bankObj, outputFile);
-                    break;
-                case 'b':
-                case 'B':
-                    balance(bankObj, kybd, outputFile,transTicket);
-                    break;
-                case 'i':
-                case 'I':
-                    acctInfo(bankObj, kybd, outputFile);
-                    break;
-                case 'd':
-                case 'D':
-                    deposit(bankObj, kybd, outputFile,transTicket);
-                    break;
-                case 'w':
-                case 'W':
-                    withdrawal(bankObj, kybd, outputFile,transTicket);
-                    break;
-                case 'c':
-                case 'C':
-                    clearCheck(bankObj, kybd, outputFile);
-                    break;
-                case 'n':
-                case 'N':
-                    newAccount(bankObj, kybd, outputFile,transTicket);
-                    break;
-                case 'h':
-                case 'H':
-                    transactionHistory(bankObj, kybd, outputFile, transTicket);
-                    break;
-                case 's':
-                case 'S':
-                    closeAccount(bankObj, kybd, outputFile,transTicket);
-                    break;
-                case 'r':
-                case 'R':
-                    reopenAccount(bankObj, kybd, outputFile,transTicket);
-                    break;
-                case 'x':
-                case 'X':
-                    deleteAccount(bankObj, kybd, outputFile,transTicket);
-                    break;
-                default:
-                    outputFile.println("Error: " + choice + " is an invalid selection -  try again");
-                    outputFile.println();
-                    outputFile.flush();
-                    break;
+            try {
+                menu();
+                choice = kybd.next(".").charAt(0);
+                switch (choice) {
+                    case 'q':
+                    case 'Q':
+                        notDone = false;
+                        printAccts(bankObj, outputFile);
+                        break;
+                    case 'b':
+                    case 'B':
+                        balance(bankObj, kybd, outputFile, transTicket);
+                        break;
+                    case 'i':
+                    case 'I':
+                        //acctInfo(bankObj, kybd, outputFile);
+                        break;
+                    case 'd':
+                    case 'D':
+                        //deposit(bankObj, kybd, outputFile,transTicket);
+                        break;
+                    case 'w':
+                    case 'W':
+                        //withdrawal(bankObj, kybd, outputFile,transTicket);
+                        break;
+                    case 'c':
+                    case 'C':
+                        //clearCheck(bankObj, kybd, outputFile);
+                        break;
+                    case 'n':
+                    case 'N':
+                        //newAccount(bankObj, kybd, outputFile,transTicket);
+                        break;
+                    case 'h':
+                    case 'H':
+                        //transactionHistory(bankObj, kybd, outputFile, transTicket);
+                        break;
+                    case 's':
+                    case 'S':
+                        //closeAccount(bankObj, kybd, outputFile,transTicket);
+                        break;
+                    case 'r':
+                    case 'R':
+                        //reopenAccount(bankObj, kybd, outputFile,transTicket);
+                        break;
+                    case 'x':
+                    case 'X':
+                        //deleteAccount(bankObj, kybd, outputFile,transTicket);
+                        break;
+                    default:
+                        throw new InvalidMenuSelection(choice);
+                }
+            } catch (InvalidMenuSelection e) {
+                outputFile.println(e.getMessage());
             }
         } while (notDone);
         kybd.close();
@@ -155,29 +156,33 @@ public class Program6 {
 
     public static void balance(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) {
         Calendar currentDate = Calendar.getInstance();
-
+        TransactionReceipt receiptBalance;
+        Account customerAcct;
         int requestedAccount;
         int index;
         // prompt for account number
         System.out.print("Enter the account number: ");
         requestedAccount = kybd.nextInt(); // read-in the account number
 
-        // call findAcct to search if requestedAccount exists
-        index = bankObj.findAcct(requestedAccount);
-        Account customerAcct = bankObj.getAccts(index);
+        try {
+            // call findAcct to search if requestedAccount exists
+            index = bankObj.findAcct(requestedAccount);
+            customerAcct = bankObj.getAccts(index);
 
-        ticket = new TransactionTicket(currentDate, "Balance Inquiry");
-        TransactionReceipt receiptBalance = customerAcct.getBalance(ticket, bankObj, index);
+            ticket = new TransactionTicket(currentDate, "Balance Inquiry");
+            receiptBalance = customerAcct.getBalance(ticket);
 
-        if(receiptBalance.getSuccessIndicatorFlag()){
-            outputFile.println(receiptBalance.toString(bankObj,index));
-        }else{
-            outputFile.println(receiptBalance.toStringError());
+            if(receiptBalance.getSuccessIndicatorFlag())
+                outputFile.println(receiptBalance.toString(bankObj,index));
+            else
+                outputFile.println(receiptBalance.toStringError());
+        } catch (InvalidAccountException e){
+            outputFile.println(e.getMessage());
         }
         outputFile.flush();
     }
 
-    public static void deposit(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) throws ParseException {
+    public static void deposit(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) throws ParseException, InvalidAccountException {
         Calendar currentDate;
         int requestedAccount;
         int index;
@@ -210,17 +215,22 @@ public class Program6 {
                 currentDate = Calendar.getInstance();
                 ticket = new TransactionTicket(currentDate,"Deposit",amountToDeposit,amountOfTerm);
                 customerAcct = new CDAccount(dateOfMature);
-                TransactionReceipt depReceipt = customerAcct.makeDeposit(ticket,bankObj,index);
 
-                if(depReceipt.getSuccessIndicatorFlag()){
-                    outputFile.println(depReceipt.toString(bankObj,index));
-                }else{
-                    outputFile.println(depReceipt.toStringError());
+                try {
+                    TransactionReceipt depReceipt = customerAcct.makeDeposit(ticket,bankObj);
+
+                    if(depReceipt.getSuccessIndicatorFlag()){
+                        outputFile.println(depReceipt.toString(bankObj,index));
+                    }else{
+                        outputFile.println(depReceipt.toStringError());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }else{
                 currentDate = Calendar.getInstance();
                 ticket = new TransactionTicket(currentDate,"Deposit",amountToDeposit);
-                TransactionReceipt depReceipt = customerAcct.makeDeposit(ticket,bankObj,index);
+                TransactionReceipt depReceipt = customerAcct.makeDeposit(ticket,bankObj);
 
                 if(depReceipt.getSuccessIndicatorFlag()) {
                     outputFile.println(depReceipt.toString(bankObj,index));
@@ -231,8 +241,8 @@ public class Program6 {
         }
         outputFile.flush();
     }
-
-    public static void withdrawal(Bank bankObj, Scanner kybd, PrintWriter outputFile, TransactionTicket ticket) throws ParseException {
+    /*
+    public static void withdrawal(Bank bankObj, Scanner kybd, PrintWriter outputFile, TransactionTicket ticket) throws ParseException, InvalidAccountException {
         Account customerAcct;
         Calendar currentDate;
 
@@ -291,7 +301,7 @@ public class Program6 {
         outputFile.flush();
     }
 
-    public static void clearCheck(Bank bankObj, Scanner kybd, PrintWriter outputFile) throws ParseException {
+    public static void clearCheck(Bank bankObj, Scanner kybd, PrintWriter outputFile) throws ParseException, InvalidAccountException {
         Account accInfo;
         TransactionTicket newTicket;
         TransactionReceipt receiptInfo;
@@ -370,7 +380,7 @@ public class Program6 {
         outputFile.flush();
     }
 
-    public static void newAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) {
+    public static void newAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) throws InvalidAccountException {
         TransactionReceipt newReceipt;
 
         System.out.print("Enter New Account Number: ");
@@ -412,7 +422,7 @@ public class Program6 {
         outputFile.flush();
     }
 
-    public static void closeAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) {
+    public static void closeAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) throws InvalidAccountException {
         TransactionReceipt info;
 
         System.out.print("Enter Account Number: ");
@@ -444,7 +454,7 @@ public class Program6 {
         outputFile.flush();
     }
 
-    public static void reopenAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile, TransactionTicket ticket)  {
+    public static void reopenAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile, TransactionTicket ticket) throws InvalidAccountException {
         TransactionReceipt info;
 
         System.out.print("Enter Account Number: ");
@@ -476,7 +486,7 @@ public class Program6 {
         outputFile.flush();
     }
 
-    public static void deleteAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) {
+    public static void deleteAccount(Bank bankObj, Scanner kybd, PrintWriter outputFile,TransactionTicket ticket) throws InvalidAccountException {
         TransactionReceipt newReceipt;
 
         System.out.print("Enter Account Number: ");
@@ -566,4 +576,6 @@ public class Program6 {
         }
         outputFile.flush();
     }
+
+     */
 }

@@ -9,31 +9,29 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index) {
+    public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj) {
         TransactionReceipt newRec;
-        Account accInfo;
-        accInfo = obj.getAccts(index);
-        String accType = accInfo.getAccountType();
+        String accType = this.getAccountType();
 
-        if(accInfo.getAccountStatus()){
+        if(this.getAccountStatus()){
             if(ticketInfo.getAmountOfTransaction() <= 0.00){
                 String reason = "Invalid amount.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason);
-                accInfo.addTransaction(newRec);
+                this.addTransaction(newRec);
                 return  newRec;
             }else{
-                double balance = accInfo.getAccountBalance();
+                double balance = this.getAccountBalance();
                 double newBalance = balance + ticketInfo.getAmountOfTransaction();
                 newRec = new TransactionReceipt(ticketInfo,true,balance,newBalance);
-                accInfo.setAccountBalance(newBalance);
+                this.setAccountBalance(newBalance);
                 obj.checkTypeDeposit(accType,ticketInfo.getAmountOfTransaction());
-                accInfo.addTransaction(newRec);
+                this.addTransaction(newRec);
                 return newRec;
             }
         }else{
             String reason = "Account is closed.";
             newRec = new TransactionReceipt(ticketInfo,false,reason);
-            accInfo.addTransaction(newRec);
+            this.addTransaction(newRec);
             return newRec;
         }
     }

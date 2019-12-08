@@ -101,14 +101,18 @@ public class Bank {
         }
     }
 
-    public int findAcct(int reqAccount){
-        for (int index = 0; index < arrayOfAccounts.size(); index++)
-            if (arrayOfAccounts.get(index).getAccountNumber() == reqAccount)
+    public int findAcct(int reqAccount) throws InvalidAccountException {
+        for (int index = 0; index < arrayOfAccounts.size(); index++) {
+            if (arrayOfAccounts.get(index).getAccountNumber() == reqAccount) {
                 return index;
+            } else {
+                throw new InvalidAccountException(arrayOfAccounts.get(index).getAccountNumber());
+            }
+        }
         return -1;
     }
 
-    public int acctUsingSSN(String reqAccount){
+    public int acctUsingSSN(String reqAccount) {
         for (int index = 0; index < arrayOfAccounts.size(); index++)
             if (arrayOfAccounts.get(index).getPersonInfo().getSSN().equals(reqAccount))
                 return index;

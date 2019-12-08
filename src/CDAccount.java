@@ -23,41 +23,40 @@ public class CDAccount extends Account {
         this.maturityDate = maturityDate;
     }
     @Override
-    public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index) {
+    public TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj) {
         TransactionReceipt cdRec;
         Calendar timeNow = Calendar.getInstance();
         Calendar newDate = Calendar.getInstance();
-        Account accInfo = obj.getAccts(index);
 
-        String acctType = accInfo.getAccountType();
+        String acctType = this.getAccountType();
 
-        if(accInfo.getAccountStatus()){
+        if(this.getAccountStatus()){
             if(this.getMaturityDate().before(timeNow) || this.getMaturityDate().equals(timeNow)){
                 if(ticketInfo.getAmountOfTransaction() <= 0.00){
                     String reason = "Invalid amount.";
                     cdRec = new TransactionReceipt(ticketInfo,false,reason);
-                    accInfo.addTransaction(cdRec);
+                    this.addTransaction(cdRec);
                     return  cdRec;
                 }else{
-                    double acctBalance = accInfo.getAccountBalance();
+                    double acctBalance = this.getAccountBalance();
                     double newBalance = acctBalance + ticketInfo.getAmountOfTransaction();
                     newDate.add(Calendar.MONTH,ticketInfo.getTermOfCD());
                     cdRec = new TransactionReceipt(ticketInfo,true,acctBalance,newBalance,newDate);
-                    accInfo.setAccountBalance(newBalance);
+                    this.setAccountBalance(newBalance);
                     obj.checkTypeDeposit(acctType,ticketInfo.getAmountOfTransaction());
-                    accInfo.addTransaction(cdRec);
+                    this.addTransaction(cdRec);
                     return cdRec;
                 }
             }else{
                 String reason = "Term has not ended.";
                 cdRec = new TransactionReceipt(ticketInfo,false,reason);
-                accInfo.addTransaction(cdRec);
+                this.addTransaction(cdRec);
                 return cdRec;
             }
         }else{
             String reason = "Account is closed.";
             cdRec = new TransactionReceipt(ticketInfo,false,reason);
-            accInfo.addTransaction(cdRec);
+            this.addTransaction(cdRec);
             return cdRec;
         }
     }

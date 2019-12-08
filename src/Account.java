@@ -41,31 +41,23 @@ public abstract class Account {
         this.arrayOfReceipts = copy.arrayOfReceipts;
     }
 
-    public TransactionReceipt getBalance(TransactionTicket ticketInfo, Bank obj, int index){
+    public TransactionReceipt getBalance(TransactionTicket ticketInfo){
         TransactionReceipt newRec;
-        Account accInfo = obj.getAccts(index);
-
-        if(index == -1) {
-            String reason = "Account not found. ";
-            newRec = new TransactionReceipt(ticketInfo,false,reason);
-            accInfo.addTransaction(newRec);
-            return newRec;
-        }else{
-            if(accInfo.getAccountStatus()){
-                double balance = accInfo.getAccountBalance();
+        
+            if(this.getAccountStatus()){
+                double balance = this.getAccountBalance();
                 newRec = new TransactionReceipt(ticketInfo, true, balance);
-                accInfo.addTransaction(newRec);
+                this.addTransaction(newRec);
                 return  newRec;
             }else{
                 String reason = "Account is closed.";
                 newRec = new TransactionReceipt(ticketInfo,false,reason);
-                accInfo.addTransaction(newRec);
+                this.addTransaction(newRec);
                 return newRec;
             }
-        }
     }
 
-    public abstract TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj, int index);
+    public abstract TransactionReceipt makeDeposit(TransactionTicket ticketInfo, Bank obj) throws InvalidAmountException;
 
     public abstract TransactionReceipt makeWithdrawal(TransactionTicket ticketInfo, Bank obj, int index);
 
